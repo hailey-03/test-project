@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NAVER</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 상단 헤더 -->
+  <header class="header">
+    <div class="header-top">
+      <a href="#" class="top-link">네이버를 시작페이지로</a>
+      <span class="divider"></span>
+      <a href="#" class="top-link">쥬니어네이버</a>
+      <a href="#" class="top-link">해피빈</a>
+    </div>
+
+    <div class="search-area">
+      <h1 class="logo"><a href="#">NAVER</a></h1>
+      <form class="search-box" id="searchForm">
+        <input type="text" id="searchInput" placeholder="검색어를 입력해 주세요." autocomplete="off">
+        <button type="button" class="btn-keyboard" title="한글 입력기">⌨</button>
+        <button type="submit" class="btn-search" aria-label="검색">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="10.5" cy="10.5" r="7"/><line x1="16" y1="16" x2="22" y2="22"/></svg>
+        </button>
+      </form>
+    </div>
+
+    <!-- 서비스 바로가기 -->
+    <nav class="shortcut">
+      <ul>
+        <li><a href="#"><span class="icon" style="background:#03c75a">✉</span>메일</a></li>
+        <li><a href="#"><span class="icon" style="background:#00b843">☕</span>카페</a></li>
+        <li><a href="#"><span class="icon" style="background:#20c060">B</span>블로그</a></li>
+        <li><a href="#"><span class="icon" style="background:#5c6bff">K</span>지식iN</a></li>
+        <li><a href="#"><span class="icon" style="background:#ff5a5a">🛍</span>쇼핑</a></li>
+        <li><a href="#"><span class="icon" style="background:#00c4b3">N</span>Pay</a></li>
+        <li><a href="#"><span class="icon" style="background:#7b5cff">▶</span>TV</a></li>
+        <li><a href="#"><span class="icon" style="background:#1ec800">⛳</span>지도</a></li>
+        <li><a href="#"><span class="icon" style="background:#ff8a00">📰</span>뉴스</a></li>
+        <li><a href="#"><span class="icon" style="background:#3d8bff">📈</span>증권</a></li>
+        <li><a href="#"><span class="icon" style="background:#00a3ff">⚽</span>스포츠</a></li>
+        <li><a href="#"><span class="icon" style="background:#ffb000">📚</span>웹툰</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- 본문 -->
+  <main class="container">
+    <!-- 좌측 영역 -->
+    <section class="left">
+      <!-- 배너 -->
+      <div class="banner">
+        <div class="banner-text">
+          <p class="banner-sub">가을맞이 특별 기획전</p>
+          <p class="banner-title">지금 바로 최대 70% 할인 혜택을 만나보세요</p>
+        </div>
+        <span class="banner-tag">AD</span>
+      </div>
+
+      <!-- 뉴스스탠드 -->
+      <div class="box newsstand">
+        <div class="box-head">
+          <h2><span class="green">뉴스스탠드</span> ›</h2>
+          <div class="tabs" id="newsTabs">
+            <button class="active" data-tab="press">언론사편집</button>
+            <button data-tab="list">전체언론사</button>
+          </div>
+        </div>
+        <div class="rolling" id="rollingNews">
+          <span class="press">연합뉴스</span>
+          <a href="#" class="rolling-text">로딩 중...</a>
+        </div>
+        <ul class="press-grid" id="pressGrid"></ul>
+      </div>
+
+      <!-- 주제별 콘텐츠 -->
+      <div class="box contents">
+        <div class="box-head">
+          <h2>오늘 읽을만한 글</h2>
+          <span class="desc">주제별로 분류된 다양한 글 모음</span>
+        </div>
+        <ul class="topic-tabs" id="topicTabs">
+          <li class="active">엔터</li>
+          <li>스포츠</li>
+          <li>자동차</li>
+          <li>웹툰</li>
+          <li>경제</li>
+          <li>레시피</li>
+          <li>리빙</li>
+          <li>여행</li>
+        </ul>
+        <ul class="card-list" id="cardList"></ul>
+      </div>
+    </section>
+
+    <!-- 우측 영역 -->
+    <aside class="right">
+      <!-- 로그인 -->
+      <div class="box login-box">
+        <p class="login-desc">네이버를 더 안전하고 편리하게 이용하세요</p>
+        <button class="btn-login"><b>NAVER</b> 로그인</button>
+        <div class="login-links">
+          <a href="#">아이디 찾기</a>
+          <a href="#">비밀번호 찾기</a>
+          <a href="#">회원가입</a>
+        </div>
+      </div>
+
+      <!-- 날씨 -->
+      <div class="box weather">
+        <div class="weather-main">
+          <span class="weather-icon">☀️</span>
+          <div>
+            <p class="temp">21.4°</p>
+            <p class="weather-desc">맑음 · 서울시 강남구</p>
+          </div>
+        </div>
+        <ul class="weather-sub">
+          <li>미세먼지 <b class="good">좋음</b></li>
+          <li>초미세먼지 <b class="good">좋음</b></li>
+          <li>습도 <b>45%</b></li>
+        </ul>
+      </div>
+
+      <!-- 증시 -->
+      <div class="box stock">
+        <h3>증시</h3>
+        <ul>
+          <li><span>코스피</span><b class="up">2,712.34 ▲ 12.05</b></li>
+          <li><span>코스닥</span><b class="down">864.21 ▼ 3.17</b></li>
+          <li><span>환율(USD)</span><b class="up">1,342.50 ▲ 2.30</b></li>
+        </ul>
+      </div>
+
+      <!-- 쇼핑 -->
+      <div class="box shopping">
+        <h3>쇼핑 <span class="green">추천</span></h3>
+        <ul class="shop-grid">
+          <li><div class="thumb" style="background:#ffe3e3">👟</div><p>러닝화 신상</p><b>59,000원</b></li>
+          <li><div class="thumb" style="background:#e3f0ff">🎧</div><p>무선 이어폰</p><b>129,000원</b></li>
+          <li><div class="thumb" style="background:#e6ffe9">🪴</div><p>반려식물 세트</p><b>19,900원</b></li>
+          <li><div class="thumb" style="background:#fff5d6">☕</div><p>원두 1kg</p><b>24,500원</b></li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+
+  <!-- 푸터 -->
+  <footer class="footer">
+    <ul class="footer-links">
+      <li><a href="#">회사소개</a></li>
+      <li><a href="#">인재채용</a></li>
+      <li><a href="#">제휴제안</a></li>
+      <li><a href="#">이용약관</a></li>
+      <li><a href="#"><b>개인정보처리방침</b></a></li>
+      <li><a href="#">청소년보호정책</a></li>
+      <li><a href="#">고객센터</a></li>
+    </ul>
+    <p class="copyright">© NAVER Corp. (학습용 클론 페이지)</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
