@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>내 AWS 리소스</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="header">
+    <h1>내 AWS 리소스</h1>
+    <span class="sub">ap-northeast-2 · 이름에 <b>cy1006</b> 포함된 리소스만</span>
+    <button class="btn" id="refreshBtn">새로고침</button>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="ec2">EC2</button>
+    <button class="tab" data-tab="s3">S3</button>
+    <button class="tab" data-tab="cost">비용(추정)</button>
+  </nav>
+
+  <main>
+    <section id="tab-ec2" class="panel">
+      <table class="table">
+        <thead>
+          <tr><th>이름</th><th>상태</th><th>타입</th><th>사설 IP</th><th>공인 IP</th><th>작업</th></tr>
+        </thead>
+        <tbody id="ec2Body"><tr><td colspan="6" class="muted">불러오는 중…</td></tr></tbody>
+      </table>
+    </section>
+
+    <section id="tab-s3" class="panel hidden">
+      <div class="s3-layout">
+        <ul id="bucketList" class="bucket-list"><li class="muted">불러오는 중…</li></ul>
+        <div class="objects">
+          <div id="objPath" class="obj-path muted">버킷을 선택하세요</div>
+          <table class="table">
+            <thead><tr><th>이름</th><th>크기</th><th>수정일</th></tr></thead>
+            <tbody id="objBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-cost" class="panel hidden">
+      <div class="cards" id="costCards"></div>
+      <table class="table">
+        <thead><tr><th>인스턴스</th><th>타입</th><th>상태</th><th>시간당(USD)</th></tr></thead>
+        <tbody id="costBody"></tbody>
+      </table>
+      <p class="muted" id="costNote"></p>
+    </section>
+  </main>
+
+  <div id="toast" class="toast hidden"></div>
+  <script src="app.js"></script>
+</body>
+</html>
