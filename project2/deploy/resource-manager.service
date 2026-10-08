@@ -1,0 +1,16 @@
+# 설치: sudo cp deploy/resource-manager.service /etc/systemd/system/
+#       sudo systemctl daemon-reload && sudo systemctl enable --now resource-manager
+[Unit]
+Description=AWS Resource Manager (project2)
+After=network-online.target
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/project/project2
+ExecStart=/usr/bin/python3 backend/server.py
+Environment=PATH=/home/ubuntu/.local/bin:/usr/local/bin:/usr/bin:/bin
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

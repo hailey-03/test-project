@@ -4,53 +4,212 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>내 AWS 리소스</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header class="header">
-    <h1>내 AWS 리소스</h1>
-    <span class="sub">ap-northeast-2 · 이름에 <b>cy1006</b> 포함된 리소스만</span>
-    <button class="btn" id="refreshBtn">새로고침</button>
-  </header>
-
-  <nav class="tabs">
-    <button class="tab active" data-tab="ec2">EC2</button>
-    <button class="tab" data-tab="s3">S3</button>
-    <button class="tab" data-tab="cost">비용(추정)</button>
-  </nav>
-
-  <main>
-    <section id="tab-ec2" class="panel">
-      <table class="table">
-        <thead>
-          <tr><th>이름</th><th>상태</th><th>타입</th><th>사설 IP</th><th>공인 IP</th><th>작업</th></tr>
-        </thead>
-        <tbody id="ec2Body"><tr><td colspan="6" class="muted">불러오는 중…</td></tr></tbody>
-      </table>
-    </section>
-
-    <section id="tab-s3" class="panel hidden">
-      <div class="s3-layout">
-        <ul id="bucketList" class="bucket-list"><li class="muted">불러오는 중…</li></ul>
-        <div class="objects">
-          <div id="objPath" class="obj-path muted">버킷을 선택하세요</div>
-          <table class="table">
-            <thead><tr><th>이름</th><th>크기</th><th>수정일</th></tr></thead>
-            <tbody id="objBody"></tbody>
-          </table>
+  <div class="app">
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.5 19a4.5 4.5 0 1 0-1.4-8.78A6 6 0 0 0 4.5 12.5 3.5 3.5 0 0 0 7 19h10.5z"/></svg>
+        </div>
+        <div>
+          <div class="brand-name">Cloud Console</div>
+          <div class="brand-sub">내 AWS 리소스</div>
         </div>
       </div>
-    </section>
 
-    <section id="tab-cost" class="panel hidden">
-      <div class="cards" id="costCards"></div>
-      <table class="table">
-        <thead><tr><th>인스턴스</th><th>타입</th><th>상태</th><th>시간당(USD)</th></tr></thead>
-        <tbody id="costBody"></tbody>
-      </table>
-      <p class="muted" id="costNote"></p>
-    </section>
-  </main>
+      <nav class="nav">
+        <div class="nav-label">리소스</div>
+        <button class="nav-item active" data-tab="ec2">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="7" rx="2"/><rect x="3" y="13" width="18" height="7" rx="2"/><circle cx="7" cy="7.5" r="1" fill="currentColor"/><circle cx="7" cy="16.5" r="1" fill="currentColor"/></svg>
+          EC2 인스턴스
+        </button>
+        <button class="nav-item" data-tab="s3">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v14c0 1.7 3.6 3 8 3s8-1.3 8-3V5"/><path d="M4 12c0 1.7 3.6 3 8 3s8-1.3 8-3"/></svg>
+          S3 버킷
+        </button>
+        <div class="nav-label">운영</div>
+        <button class="nav-item" data-tab="schedule">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          자동 스케줄
+        </button>
+        <button class="nav-item" data-tab="logs">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 6h13M8 12h13M8 18h13"/><circle cx="4" cy="6" r="1" fill="currentColor"/><circle cx="4" cy="12" r="1" fill="currentColor"/><circle cx="4" cy="18" r="1" fill="currentColor"/></svg>
+          작업 기록
+        </button>
+        <button class="nav-item" data-tab="cost">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          비용 (추정)
+        </button>
+      </nav>
+
+      <div class="env">
+        <div class="env-row"><span>프로필</span><b id="envProfile">-</b></div>
+        <div class="env-row"><span>리전</span><b id="envRegion">-</b></div>
+        <div class="env-row"><span>필터</span><b id="envKeyword">-</b></div>
+      </div>
+    </aside>
+
+    <!-- 메인 -->
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="pageTitle">EC2 인스턴스</h1>
+          <p id="pageDesc" class="page-desc"></p>
+        </div>
+        <div class="topbar-right">
+          <span id="updatedAt" class="updated"></span>
+          <button class="btn btn-ghost" id="refreshBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-2.64-6.36"/><path d="M21 3v6h-6"/></svg>
+            새로고침
+          </button>
+        </div>
+      </header>
+
+      <!-- EC2 -->
+      <section id="tab-ec2" class="view">
+        <div class="stats" id="ec2Stats"></div>
+        <div class="instance-grid" id="ec2Grid"></div>
+      </section>
+
+      <!-- S3 -->
+      <section id="tab-s3" class="view hidden">
+        <div class="s3-layout">
+          <div class="card">
+            <div class="card-head">버킷</div>
+            <ul id="bucketList" class="bucket-list"></ul>
+          </div>
+          <div class="card">
+            <div class="card-head card-head-row">
+              <div class="breadcrumb" id="objPath"><span class="muted">왼쪽에서 버킷을 선택하세요</span></div>
+              <label class="btn btn-sm" id="uploadBtn" hidden>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 16V4M6 10l6-6 6 6M4 20h16"/></svg>
+                업로드
+                <input type="file" id="uploadInput" multiple hidden>
+              </label>
+            </div>
+            <div class="upload-progress hidden" id="uploadProgress"></div>
+            <div class="table-wrap">
+              <table class="table">
+                <thead><tr><th>이름</th><th class="right">크기</th><th class="right">수정일</th><th class="right"></th></tr></thead>
+                <tbody id="objBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 스케줄 -->
+      <section id="tab-schedule" class="view hidden">
+        <div class="card">
+          <div class="card-head">새 스케줄</div>
+          <form class="schedule-form" id="scheduleForm">
+            <label class="field">
+              <span>인스턴스</span>
+              <select id="schInstance" required></select>
+            </label>
+            <label class="field">
+              <span>작업</span>
+              <select id="schAction">
+                <option value="stop">중지</option>
+                <option value="start">시작</option>
+              </select>
+            </label>
+            <label class="field">
+              <span>시간 (한국 시간)</span>
+              <input type="time" id="schTime" value="19:00" required>
+            </label>
+            <div class="field field-days">
+              <span>요일
+                <span class="presets">
+                  <button type="button" data-preset="weekday">평일</button>
+                  <button type="button" data-preset="weekend">주말</button>
+                  <button type="button" data-preset="all">매일</button>
+                </span>
+              </span>
+              <div class="days" id="schDays"></div>
+            </div>
+            <button class="btn" type="submit">스케줄 추가</button>
+          </form>
+        </div>
+
+        <div class="card mt">
+          <div class="card-head">등록된 스케줄</div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>인스턴스</th><th>작업</th><th>시간</th><th>요일</th><th>사용</th><th class="right"></th></tr></thead>
+              <tbody id="scheduleBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="notice">
+          ⏱️ 스케줄은 이 관리 서버(<code>backend/server.py</code>)가 켜져 있을 때만 실행돼요.
+          실행 결과는 <b>작업 기록</b>에서 확인할 수 있어요.
+        </div>
+      </section>
+
+      <!-- 작업 기록 -->
+      <section id="tab-logs" class="view hidden">
+        <div class="card">
+          <div class="card-head">이 페이지 · 스케줄로 실행한 작업</div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>시간</th><th>출처</th><th>인스턴스</th><th>작업</th><th>결과</th></tr></thead>
+              <tbody id="logBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card mt">
+          <div class="card-head card-head-row">
+            <span>AWS 전체 기록 <span class="muted head-sub">CloudTrail · 최근 7일 · 콘솔 등 다른 곳에서 한 작업 포함</span></span>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead><tr><th>시간</th><th>이벤트</th><th>인스턴스</th><th>사용자</th><th>접속 IP</th></tr></thead>
+              <tbody id="trailBody"></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="notice">CloudTrail 기록은 실제 작업 후 반영까지 5~15분 정도 걸릴 수 있어요.</div>
+      </section>
+
+      <!-- 비용 -->
+      <section id="tab-cost" class="view hidden">
+        <div class="stats" id="costStats"></div>
+        <div class="card">
+          <div class="card-head">인스턴스별 시간당 요금</div>
+          <div id="costBreakdown" class="breakdown"></div>
+        </div>
+        <div class="notice" id="costNote"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 확인 모달 -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-box">
+      <h3 id="modalTitle"></h3>
+      <p id="modalText"></p>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="modalCancel">취소</button>
+        <button class="btn" id="modalOk">확인</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 상세 모달 (보안그룹) -->
+  <div id="detail" class="modal hidden">
+    <div class="modal-box modal-wide">
+      <div class="detail-head">
+        <h3 id="detailTitle"></h3>
+        <button class="icon-btn" id="detailClose" aria-label="닫기">✕</button>
+      </div>
+      <div id="detailBody"></div>
+    </div>
+  </div>
 
   <div id="toast" class="toast hidden"></div>
   <script src="app.js"></script>
